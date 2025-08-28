@@ -103,6 +103,7 @@ python3 benchmark.py \
 ```
 
 ### Google Speech-to-Text Instructions
+
 Replace `${DATASET}` with one of the supported datasets, `${DATASET_FOLDER}` with path to dataset, `${LANGUAGE}` with the target language,
 and `${GOOGLE_APPLICATION_CREDENTIALS}` with credentials download from Google Cloud Platform.
 
