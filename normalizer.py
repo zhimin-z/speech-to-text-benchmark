@@ -244,7 +244,14 @@ class EnglishNormalizer(Normalizer):
         sentence = re.sub(self.APOSTROPHE_REGEX, "", sentence)
 
         def num2txt(y):
-            return p.number_to_words(y).replace("-", " ").replace(",", "") if any(x.isdigit() for x in y) else y
+            if any(x.isdigit() for x in y):
+                ends_with_period = y[-1] == '.' and self._keep_punctuation
+                if ends_with_period:
+                    y = y[:-1]
+                y = p.number_to_words(y).replace("-", " ").replace(",", "")
+                if ends_with_period:
+                    y += '.'
+            return y
 
         sentence = " ".join(num2txt(x) for x in sentence.split())
 
