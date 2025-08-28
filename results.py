@@ -3,22 +3,25 @@ from engine import Engines
 
 RTF = {
     Engines.PICOVOICE_LEOPARD: {
-        Datasets.TED_LIUM: 0.05,
+        Datasets.TED_LIUM: 0.042,
+    },
+    Engines.PICOVOICE_CHEETAH_FAST: {
+        Datasets.TED_LIUM: 0.073,
     },
     Engines.PICOVOICE_CHEETAH: {
-        Datasets.TED_LIUM: 0.09,
+        Datasets.TED_LIUM: 0.082,
     },
     Engines.WHISPER_TINY: {
-        Datasets.TED_LIUM: 0.15,
+        Datasets.TED_LIUM: 0.158,
     },
     Engines.WHISPER_BASE: {
-        Datasets.TED_LIUM: 0.28,
+        Datasets.TED_LIUM: 0.323,
     },
     Engines.WHISPER_SMALL: {
-        Datasets.TED_LIUM: 0.89,
+        Datasets.TED_LIUM: 0.988,
     },
     Engines.WHISPER_MEDIUM: {
-        Datasets.TED_LIUM: 1.50,
+        Datasets.TED_LIUM: 1.522,
     },
 }
 
@@ -54,10 +57,16 @@ WER_EN = {
         Datasets.TED_LIUM: 11.71,
     },
     Engines.PICOVOICE_CHEETAH: {
-        Datasets.COMMON_VOICE: 18.2,
+        Datasets.COMMON_VOICE: 17.5,
         Datasets.LIBRI_SPEECH_TEST_CLEAN: 5.3,
-        Datasets.LIBRI_SPEECH_TEST_OTHER: 11.9,
-        Datasets.TED_LIUM: 7,
+        Datasets.LIBRI_SPEECH_TEST_OTHER: 11.7,
+        Datasets.TED_LIUM: 6.6,
+    },
+    Engines.PICOVOICE_CHEETAH_FAST: {
+        Datasets.COMMON_VOICE: 20.3,
+        Datasets.LIBRI_SPEECH_TEST_CLEAN: 5.9,
+        Datasets.LIBRI_SPEECH_TEST_OTHER: 13.5,
+        Datasets.TED_LIUM: 7.1,
     },
     Engines.PICOVOICE_LEOPARD: {
         Datasets.COMMON_VOICE: 16.1,
@@ -114,9 +123,14 @@ WER_FR = {
         Datasets.VOX_POPULI: 15.1,
     },
     Engines.PICOVOICE_CHEETAH: {
-        Datasets.COMMON_VOICE: 14.8,
+        Datasets.COMMON_VOICE: 14.7,
         Datasets.MLS: 14.2,
-        Datasets.VOX_POPULI: 15.1,
+        Datasets.VOX_POPULI: 15.0,
+    },
+    Engines.PICOVOICE_CHEETAH_FAST: {
+        Datasets.COMMON_VOICE: 16.1,
+        Datasets.MLS: 14.5,
+        Datasets.VOX_POPULI: 15.3,
     },
     Engines.PICOVOICE_LEOPARD: {
         Datasets.COMMON_VOICE: 15.9,
@@ -167,9 +181,14 @@ WER_ES = {
         Datasets.VOX_POPULI: 11.6,
     },
     Engines.PICOVOICE_CHEETAH: {
-        Datasets.COMMON_VOICE: 7.8,
+        Datasets.COMMON_VOICE: 7.7,
         Datasets.MLS: 8.2,
         Datasets.VOX_POPULI: 12.9,
+    },
+    Engines.PICOVOICE_CHEETAH_FAST: {
+        Datasets.COMMON_VOICE: 8.6,
+        Datasets.MLS: 7.6,
+        Datasets.VOX_POPULI: 11.9,
     },
     Engines.PICOVOICE_LEOPARD: {
         Datasets.COMMON_VOICE: 7.6,
@@ -220,9 +239,14 @@ WER_DE = {
         Datasets.VOX_POPULI: 17.2,
     },
     Engines.PICOVOICE_CHEETAH: {
-        Datasets.COMMON_VOICE: 9.3,
-        Datasets.MLS: 11.0,
-        Datasets.VOX_POPULI: 16.9,
+        Datasets.COMMON_VOICE: 9.2,
+        Datasets.MLS: 10.7,
+        Datasets.VOX_POPULI: 16.8,
+    },
+    Engines.PICOVOICE_CHEETAH_FAST: {
+        Datasets.COMMON_VOICE: 10.7,
+        Datasets.MLS: 11.1,
+        Datasets.VOX_POPULI: 17.7,
     },
     Engines.PICOVOICE_LEOPARD: {
         Datasets.COMMON_VOICE: 8.2,
@@ -273,9 +297,14 @@ WER_IT = {
         Datasets.VOX_POPULI: 18.7,
     },
     Engines.PICOVOICE_CHEETAH: {
-        Datasets.COMMON_VOICE: 8.9,
-        Datasets.MLS: 17.7,
+        Datasets.COMMON_VOICE: 9.0,
+        Datasets.MLS: 17.3,
         Datasets.VOX_POPULI: 19.9,
+    },
+    Engines.PICOVOICE_CHEETAH_FAST: {
+        Datasets.COMMON_VOICE: 10.3,
+        Datasets.MLS: 17.3,
+        Datasets.VOX_POPULI: 20.5,
     },
     Engines.PICOVOICE_LEOPARD: {
         Datasets.COMMON_VOICE: 13.0,
@@ -324,7 +353,11 @@ WER_PT = {
     },
     Engines.PICOVOICE_CHEETAH: {
         Datasets.COMMON_VOICE: 10.5,
-        Datasets.MLS: 15.9,
+        Datasets.MLS: 15.8,
+    },
+    Engines.PICOVOICE_CHEETAH_FAST: {
+        Datasets.COMMON_VOICE: 12.4,
+        Datasets.MLS: 15.8,
     },
     Engines.PICOVOICE_LEOPARD: {
         Datasets.COMMON_VOICE: 17.1,
@@ -369,9 +402,14 @@ PER_EN = {
         Datasets.COMMON_VOICE: 21.3,
     },
     Engines.PICOVOICE_CHEETAH: {
-        Datasets.VOX_POPULI: 30.0,
-        Datasets.FLEURS: 18.3,
-        Datasets.COMMON_VOICE: 6.0,
+        Datasets.VOX_POPULI: 27.6,
+        Datasets.FLEURS: 13.4,
+        Datasets.COMMON_VOICE: 4.6,
+    },
+    Engines.PICOVOICE_CHEETAH_FAST: {
+        Datasets.VOX_POPULI: 27.4,
+        Datasets.FLEURS: 15.4,
+        Datasets.COMMON_VOICE: 8.5,
     },
     Engines.WHISPER_TINY: {
         Datasets.VOX_POPULI: 24.7,
@@ -395,7 +433,7 @@ PER_EN = {
     },
     Engines.WHISPER_LARGE: {
         Datasets.VOX_POPULI: 21.4,
-        Datasets.FLEURS: 11.6,
+        Datasets.FLEURS: 11.1,
         Datasets.COMMON_VOICE: 10.2,
     },
 }
@@ -442,9 +480,14 @@ PER_FR = {
         Datasets.COMMON_VOICE: 15,
     },
     Engines.PICOVOICE_CHEETAH: {
-        Datasets.VOX_POPULI: 38.3,
-        Datasets.FLEURS: 23.7,
-        Datasets.COMMON_VOICE: 8.8,
+        Datasets.VOX_POPULI: 37.0,
+        Datasets.FLEURS: 22.8,
+        Datasets.COMMON_VOICE: 8.4,
+    },
+    Engines.PICOVOICE_CHEETAH_FAST: {
+        Datasets.VOX_POPULI: 35.2,
+        Datasets.FLEURS: 20.7,
+        Datasets.COMMON_VOICE: 8.7,
     },
 }
 
@@ -490,9 +533,14 @@ PER_ES = {
         Datasets.COMMON_VOICE: 18.9,
     },
     Engines.PICOVOICE_CHEETAH: {
-        Datasets.VOX_POPULI: 47.8,
-        Datasets.FLEURS: 21,
-        Datasets.COMMON_VOICE: 5.7,
+        Datasets.VOX_POPULI: 41.7,
+        Datasets.FLEURS: 20.4,
+        Datasets.COMMON_VOICE: 5.4,
+    },
+    Engines.PICOVOICE_CHEETAH_FAST: {
+        Datasets.VOX_POPULI: 38.4,
+        Datasets.FLEURS: 20.9,
+        Datasets.COMMON_VOICE: 4.8,
     },
 }
 
@@ -538,9 +586,14 @@ PER_DE = {
         Datasets.COMMON_VOICE: 9.3,
     },
     Engines.PICOVOICE_CHEETAH: {
-        Datasets.VOX_POPULI: 29.7,
-        Datasets.FLEURS: 24.3,
-        Datasets.COMMON_VOICE: 3.2,
+        Datasets.VOX_POPULI: 31.0,
+        Datasets.FLEURS: 23.7,
+        Datasets.COMMON_VOICE: 3.1,
+    },
+    Engines.PICOVOICE_CHEETAH_FAST: {
+        Datasets.VOX_POPULI: 32.7,
+        Datasets.FLEURS: 24.8,
+        Datasets.COMMON_VOICE: 3.4,
     },
 }
 
@@ -586,9 +639,14 @@ PER_IT = {
         Datasets.COMMON_VOICE: 27.4,
     },
     Engines.PICOVOICE_CHEETAH: {
-        Datasets.VOX_POPULI: 48.6,
-        Datasets.FLEURS: 27.2,
-        Datasets.COMMON_VOICE: 5.6,
+        Datasets.VOX_POPULI: 48.7,
+        Datasets.FLEURS: 27.5,
+        Datasets.COMMON_VOICE: 5.1,
+    },
+    Engines.PICOVOICE_CHEETAH_FAST: {
+        Datasets.VOX_POPULI: 49.1,
+        Datasets.FLEURS: 31.0,
+        Datasets.COMMON_VOICE: 4.0,
     },
 }
 
@@ -626,8 +684,12 @@ PER_PT = {
         Datasets.COMMON_VOICE: 22.2,
     },
     Engines.PICOVOICE_CHEETAH: {
-        Datasets.FLEURS: 32.8,
-        Datasets.COMMON_VOICE: 12.4,
+        Datasets.FLEURS: 31.8,
+        Datasets.COMMON_VOICE: 13.3,
+    },
+    Engines.PICOVOICE_CHEETAH_FAST: {
+        Datasets.FLEURS: 33.0,
+        Datasets.COMMON_VOICE: 12.9,
     },
 }
 

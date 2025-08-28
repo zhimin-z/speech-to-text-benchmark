@@ -47,6 +47,7 @@ class Engines(Enum):
     WHISPER_LARGE_V2 = "WHISPER_LARGE_V2"
     WHISPER_LARGE_V3 = "WHISPER_LARGE_V3"
     PICOVOICE_CHEETAH = "PICOVOICE_CHEETAH"
+    PICOVOICE_CHEETAH_FAST = "PICOVOICE_CHEETAH_FAST"
     PICOVOICE_LEOPARD = "PICOVOICE_LEOPARD"
 
 
@@ -91,6 +92,8 @@ class Engine(object):
         elif x is Engines.WHISPER_LARGE_V3:
             return WhisperLargeV3(language=language)
         elif x is Engines.PICOVOICE_CHEETAH:
+            return PicovoiceCheetahEngine(**kwargs)
+        elif x is Engines.PICOVOICE_CHEETAH_FAST:
             return PicovoiceCheetahEngine(**kwargs)
         elif x is Engines.PICOVOICE_LEOPARD:
             return PicovoiceLeopardEngine(**kwargs)

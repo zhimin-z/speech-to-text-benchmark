@@ -103,7 +103,6 @@ python3 benchmark.py \
 ```
 
 ### Google Speech-to-Text Instructions
-
 Replace `${DATASET}` with one of the supported datasets, `${DATASET_FOLDER}` with path to dataset, `${LANGUAGE}` with the target language,
 and `${GOOGLE_APPLICATION_CREDENTIALS}` with credentials download from Google Cloud Platform.
 
@@ -148,7 +147,8 @@ python3 benchmark.py \
 
 Replace `${DATASET}` with one of the supported datasets, `${DATASET_FOLDER}` with path to dataset, `${LANGUAGE}` with the target language,
 and `${PICOVOICE_ACCESS_KEY}` with AccessKey obtained from [Picovoice Console](https://console.picovoice.ai/).
-If benchmarking a non-English language, include `--picovoice-model-path` and replace `${PICOVOICE_MODEL_PATH}` with the path to a model file acquired from the [Cheetah Github Repo](https://github.com/Picovoice/cheetah/tree/master/lib/common/).
+By default, the Cheetah English model is used.
+For non-English languages and Cheetah Fast models replace `${PICOVOICE_MODEL_PATH}` with the path to a model file acquired from the [Cheetah Github Repo](https://github.com/Picovoice/cheetah/tree/master/lib/common/).
 
 ```console
 python3 benchmark.py \
@@ -208,7 +208,8 @@ python3 -m script.download_fleurs \
 |         Whisper Small          |          3.3%          |          7.2%          |   4.8%   |    12.7%    |  7.0%   |
 |          Whisper Base          |          4.3%          |         10.4%          |   5.4%   |    17.9%    |  9.5%   |
 |          Whisper Tiny          |          5.9%          |         13.8%          |   6.5%   |    24.4%    |  12.7%  |
-|       Picovoice Cheetah        |          5.3%          |         11.9%          |   7.0%   |    18.2%    |  10.6%  |
+|       Picovoice Cheetah        |          5.3%          |         11.7%          |   6.6%   |    17.5%    |  10.3%  |
+|     Picovoice Cheetah Fast     |          5.9%          |         13.5%          |   7.1%   |    20.3%    |  11.7%  |
 |       Picovoice Leopard        |          5.1%          |         11.1%          |   6.4%   |    16.1%    |  9.7%   |
 
 
@@ -218,30 +219,32 @@ python3 -m script.download_fleurs \
 
 |             Engine             | CommonVoice | Fleurs | VoxPopuli | Average |
 |:------------------------------:|:-----------:|:------:|:---------:|:-------:|
-|       Amazon Transcribe        |    3.8%     | 12.1%  |   19.1%   |  11.7%  |
-|      Azure Speech-to-Text      |    6.0%     | 18.9%  |   23.0%   |  16.0%  |
-|     Google Speech-to-Text      |    21.3%    | 43.4%  |   45.7%   |  36.8%  |
-|  Whisper Large (Multilingual)  |    10.2%    | 11.6%  |   21.4%   |  14.4%  |
-|         Whisper Medium         |    10.4%    | 10.2%  |   21.7%   |  14.1%  |
-|         Whisper Small          |    10.8%    | 12.2%  |   22.5%   |  15.2%  |
-|          Whisper Base          |    9.7%     | 14.2%  |   23.7%   |  15.9%  |
-|          Whisper Tiny          |    12.2%    | 15.4%  |   24.7%   |  17.4%  |
-|       Picovoice Cheetah        |    6.0%     | 18.3%  |   30.0%   |  18.1%  |
+|       Amazon Transcribe        |    3.8%     | 11.9%  |   19.1%   |  11.6%  |
+|      Azure Speech-to-Text      |    6.0%     | 18.8%  |   23.0%   |  15.9%  |
+|     Google Speech-to-Text      |    21.3%    | 43.8%  |   45.7%   |  36.9%  |
+|  Whisper Large (Multilingual)  |    10.2%    | 11.1%  |   21.4%   |  14.2%  |
+|         Whisper Medium         |    10.4%    | 10.1%  |   21.7%   |  14.1%  |
+|         Whisper Small          |    10.8%    | 12.0%  |   22.5%   |  15.1%  |
+|          Whisper Base          |    9.7%     | 14.0%  |   23.7%   |  15.8%  |
+|          Whisper Tiny          |    12.2%    | 15.5%  |   24.7%   |  17.5%  |
+|       Picovoice Cheetah        |    4.6%     | 13.4%  |   27.6%   |  15.2%  |
+|     Picovoice Cheetah Fast     |    8.5%     | 15.4%  |   27.4%   |  17.1%  |
 
 #### Core-Hour & Model Size
 
-To obtain these results, we ran the benchmark across the entire TED-LIUM dataset and recorded the processing time.
+To obtain these results, we ran the benchmark across the entire LibriSpeech test-clean dataset and recorded the processing time.
 The measurement is carried out on an Ubuntu 22.04 machine with AMD CPU (`AMD Ryzen 9 5900X (12) @ 3.70GHz`),
 64 GB of RAM, and NVMe storage, using 10 cores simultaneously. We omit Whisper Large from this benchmark.
 
-|      Engine       | Core-Hour | Model Size / MB |
-|:-----------------:|:---------:|:---------------:|
-|  Whisper Medium   |   1.50    |      1457       |
-|   Whisper Small   |   0.89    |       462       |
-|   Whisper Base    |   0.28    |       139       |
-|   Whisper Tiny    |   0.15    |       73        |
-| Picovoice Leopard |   0.05    |       36        |
-| Picovoice Cheetah |   0.09    |       31        |
+|         Engine         | Core-Hour | Model Size / MB |
+|:----------------------:|:---------:|:---------------:|
+|    Whisper Medium      |   1.52    |      1457       |
+|    Whisper Small       |   0.99    |       462       |
+|     Whisper Base       |   0.32    |       139       |
+|     Whisper Tiny       |   0.16    |       73        |
+|   Picovoice Leopard    |   0.04    |       36        |
+|   Picovoice Cheetah    |   0.08    |       31        |
+| Picovoice Cheetah Fast |   0.07    |       31        |
 
 ![](results/plots/cpu_usage_comparison.png)
 
@@ -261,7 +264,8 @@ The measurement is carried out on an Ubuntu 22.04 machine with AMD CPU (`AMD Ryz
 |         Whisper Small          |    19.2%    |          13.5%            |   15.3%   |  16.0%  |
 |          Whisper Base          |    35.4%    |          24.4%            |   23.3%   |  27.7%  |
 |          Whisper Tiny          |    49.8%    |          36.2%            |   32.1%   |  39.4%  |
-|       Picovoice Cheetah        |    14.8%    |          14.2%            |   15.1%   |  14.7%  |
+|       Picovoice Cheetah        |    14.7%    |          14.2%            |   15.0%   |  14.6%  |
+|     Picovoice Cheetah Fast     |    16.1%    |          14.5%            |   15.3%   |  15.3%  |
 |       Picovoice Leopard        |    15.9%    |          19.2%            |   17.5%   |  17.5%  |
 
 #### Punctuation Error Rate
@@ -278,7 +282,8 @@ The measurement is carried out on an Ubuntu 22.04 machine with AMD CPU (`AMD Ryz
 |         Whisper Small          |    10.2%    | 13.4%  |   25.0%   |  16.2%  |
 |          Whisper Base          |    10.9%    | 18.5%  |   26.8%   |  18.7%  |
 |          Whisper Tiny          |    15.0%    | 27.3%  |   31.5%   |  24.6%  |
-|       Picovoice Cheetah        |    8.8%     | 23.7%  |   38.3%   |  23.6%  |
+|       Picovoice Cheetah        |    8.4%     | 22.8%  |   37.0%   |  22.7%  |
+|     Picovoice Cheetah Fast     |    8.7%     | 20.7%  |   35.2%   |  21.5%  |
 
 
 ### German
@@ -297,7 +302,8 @@ The measurement is carried out on an Ubuntu 22.04 machine with AMD CPU (`AMD Ryz
 |         Whisper Small          |    13.8%    |          11.2%            |   16.2%   |  13.7%  |
 |          Whisper Base          |    26.9%    |          19.8%            |   24.0%   |  23.6%  |
 |          Whisper Tiny          |    39.5%    |          28.6%            |   33.0%   |  33.7%  |
-|       Picovoice Cheetah        |    9.3%     |          11.0%            |   16.9%   |  12.4%  |
+|       Picovoice Cheetah        |    9.2%     |          10.7%            |   16.8%   |  12.2%  |
+|     Picovoice Cheetah Fast     |    10.7%    |          11.1%            |   17.7%   |  13.2%  |
 |       Picovoice Leopard        |    8.2%     |          11.6%            |   23.6%   |  14.5%  |
 
 #### Punctuation Error Rate
@@ -314,7 +320,8 @@ The measurement is carried out on an Ubuntu 22.04 machine with AMD CPU (`AMD Ryz
 |         Whisper Small          |    3.7%     | 11.5%  |   22.6%   |  12.6%  |
 |          Whisper Base          |    5.8%     | 14.9%  |   25.6%   |  15.4%  |
 |          Whisper Tiny          |    9.3%     | 22.0%  |   30.0%   |  20.4%  |
-|       Picovoice Cheetah        |    3.2%     | 24.3%  |   29.7%   |  19.1%  |
+|       Picovoice Cheetah        |    3.1%     | 23.7%  |   31.0%   |  19.3%  |
+|     Picovoice Cheetah Fast     |    3.4%     | 24.8%  |   32.7%   |  20.3%  |
 
 ### Italian
 
@@ -332,7 +339,8 @@ The measurement is carried out on an Ubuntu 22.04 machine with AMD CPU (`AMD Ryz
 |         Whisper Small          |    15.4%    |          20.6%            |   22.7%   |  19.6%  |
 |          Whisper Base          |    32.3%    |          31.6%            |   31.6%   |  31.8%  |
 |          Whisper Tiny          |    48.1%    |          43.3%            |   43.5%   |  45.0%  |
-|       Picovoice Cheetah        |    8.9%     |          17.7%            |   19.9%   |  15.5%  |
+|       Picovoice Cheetah        |    9.0%     |          17.3%            |   19.9%   |  15.4%  |
+|     Picovoice Cheetah Fast     |    10.3%    |          17.3%            |   20.5%   |  16.0%  |
 |       Picovoice Leopard        |    13.0%    |          27.7%            |   22.2%   |  21.0%  |
 
 #### Punctuation Error Rate
@@ -349,7 +357,8 @@ The measurement is carried out on an Ubuntu 22.04 machine with AMD CPU (`AMD Ryz
 |         Whisper Small          |    10.8%    | 12.9%  |   39.0%   |  20.9%  |
 |          Whisper Base          |    19.8%    | 18.2%  |   45.7%   |  27.9%  |
 |          Whisper Tiny          |    27.4%    | 26.3%  |   45.3%   |  33.0%  |
-|       Picovoice Cheetah        |    5.6%     | 27.2%  |   48.6%   |  27.1%  |
+|       Picovoice Cheetah        |    5.1%     | 27.5%  |   48.7%   |  27.1%  |
+|     Picovoice Cheetah Fast     |    4.0%     | 31.0%  |   49.1%   |  28.0%  |
 
 ### Spanish
 
@@ -367,7 +376,8 @@ The measurement is carried out on an Ubuntu 22.04 machine with AMD CPU (`AMD Ryz
 |         Whisper Small          |    9.8%     |          7.7%             |   11.4%   |  9.6%   |
 |          Whisper Base          |    20.2%    |          13.0%            |   15.3%   |  16.2%  |
 |          Whisper Tiny          |    33.3%    |          20.6%            |   22.7%   |  25.5%  |
-|       Picovoice Cheetah        |    7.8%     |          8.2%             |   12.9%   |  9.6%   |
+|       Picovoice Cheetah        |    7.7%     |          8.2%             |   12.9%   |  9.6%   |
+|     Picovoice Cheetah Fast     |    8.6%     |          7.6%             |   11.9%   |  9.4%   |
 |       Picovoice Leopard        |    7.6%     |          14.9%            |   14.1%   |  12.2%  |
 
 #### Punctuation Error Rate
@@ -384,7 +394,8 @@ The measurement is carried out on an Ubuntu 22.04 machine with AMD CPU (`AMD Ryz
 |         Whisper Small          |    10.9%    | 12.1%  |   29.8%   |  17.6%  |
 |          Whisper Base          |    16.9%    | 15.0%  |   32.2%   |  21.4%  |
 |          Whisper Tiny          |    18.9%    | 17.6%  |   33.3%   |  23.3%  |
-|       Picovoice Cheetah        |    5.7%     | 21.0%  |   47.8%   |  24.8%  |
+|       Picovoice Cheetah        |    5.4%     | 20.4%  |   41.7%   |  22.5%  |
+|     Picovoice Cheetah Fast     |    4.8%     | 20.9%  |   38.4%   |  21.4%  |
 
 ### Portuguese
 
@@ -404,7 +415,8 @@ For Amazon Transcribe, Azure Speech-to-Text, and Google Speech-to-Text, we repor
 |         Whisper Small          |    15.6%    |          13.0%            |  14.3%  |
 |          Whisper Base          |    31.2%    |          22.7%            |  27.0%  |
 |          Whisper Tiny          |    47.7%    |          34.6%            |  41.2%  |
-|       Picovoice Cheetah        |    10.5%    |          15.9%            |  13.2%  |
+|       Picovoice Cheetah        |    10.5%    |          15.8%            |  13.2%  |
+|     Picovoice Cheetah Fast     |    12.4%    |          15.8%            |  14.1%  |
 |       Picovoice Leopard        |    17.1%    |          20.0%            |  18.6%  |
 
 #### Punctuation Error Rate
@@ -421,4 +433,5 @@ For Amazon Transcribe, Azure Speech-to-Text, and Google Speech-to-Text, we repor
 |         Whisper Small          |    11.6%    | 13.9%  |  12.8%  |
 |          Whisper Base          |    15.4%    | 16.9%  |  16.2%  |
 |          Whisper Tiny          |    22.2%    | 22.7%  |  22.5%  |
-|       Picovoice Cheetah        |    12.4%    | 32.8%  |  22.6%  |
+|       Picovoice Cheetah        |    13.3%    | 31.8%  |  22.6%  |
+|     Picovoice Cheetah Fast     |    12.9%    | 33.0%  |  23.0%  |
