@@ -43,6 +43,7 @@ ENGINE_PRINT_NAMES = {
     Engines.WHISPER_MEDIUM: "Whisper\nMedium",
     Engines.WHISPER_LARGE: "Whisper\nLarge",
     Engines.PICOVOICE_CHEETAH: "Picovoice\nCheetah",
+    Engines.PICOVOICE_CHEETAH_FAST: "Picovoice\nCheetah\nFast",
     Engines.PICOVOICE_LEOPARD: "Picovoice\nLeopard",
 }
 
@@ -59,6 +60,7 @@ ENGINE_COLORS = {
     Engines.WHISPER_TINY: GREY1,
     Engines.PICOVOICE_LEOPARD: BLUE,
     Engines.PICOVOICE_CHEETAH: BLUE,
+    Engines.PICOVOICE_CHEETAH_FAST: BLUE,
 }
 
 
@@ -70,13 +72,7 @@ def _plot_error_rate(
 ) -> None:
     sorted_error_rates = sorted(
         [
-            (
-                e,
-                round(
-                    sum(w for w in engine_error_rate[e].values()) / len(engine_error_rate[e]) + 1e-9,
-                    1,
-                ),
-            )
+            (e, round(sum(w for w in engine_error_rate[e].values()) / len(engine_error_rate[e]) + 1e-9, 1))
             for e in engine_error_rate.keys()
         ],
         key=lambda x: x[1],
@@ -127,7 +123,7 @@ def _plot_cpu(save_folder: str, show: bool, dataset: Datasets = Datasets.TED_LIU
     x_limit = 0
     for engine_type, engine_value in RTF.items():
         core_hour = engine_value[dataset] * 100
-        core_hour = round(core_hour, 0)
+        core_hour = round(core_hour, 1)
         x_limit = max(x_limit, core_hour)
         ax.barh(
             ENGINE_PRINT_NAMES[engine_type],
@@ -140,7 +136,7 @@ def _plot_cpu(save_folder: str, show: bool, dataset: Datasets = Datasets.TED_LIU
         ax.text(
             core_hour + 30,
             ENGINE_PRINT_NAMES[engine_type],
-            f"{core_hour:.0f}\nCore-hour",
+            f"{core_hour:.1f}\nCore-hour",
             ha="center",
             va="center",
             fontsize=12,
@@ -152,7 +148,7 @@ def _plot_cpu(save_folder: str, show: bool, dataset: Datasets = Datasets.TED_LIU
     ax.spines["right"].set_visible(False)
     plt.xlim([0, x_limit + 50])
     ax.set_xticks([])
-    ax.set_ylim([-0.5, 5.5])
+    ax.set_ylim([-0.5, 6.5])
     plt.title(
         "Core-hour required to process 100 hours of audio (lower is better)",
         fontsize=12,
@@ -181,12 +177,14 @@ def main() -> None:
     _plot_error_rate(WER_ES, save_path=os.path.join(save_folder, "WER_ES.png"), show=args.show)
     _plot_error_rate(WER_IT, save_path=os.path.join(save_folder, "WER_IT.png"), show=args.show)
     _plot_error_rate(WER_PT, save_path=os.path.join(save_folder, "WER_PT.png"), show=args.show)
+
     _plot_error_rate(PER_EN, save_path=os.path.join(save_folder, "PER.png"), punctuation=True, show=args.show)
     _plot_error_rate(PER_FR, save_path=os.path.join(save_folder, "PER_FR.png"), punctuation=True, show=args.show)
     _plot_error_rate(PER_DE, save_path=os.path.join(save_folder, "PER_DE.png"), punctuation=True, show=args.show)
     _plot_error_rate(PER_ES, save_path=os.path.join(save_folder, "PER_ES.png"), punctuation=True, show=args.show)
     _plot_error_rate(PER_IT, save_path=os.path.join(save_folder, "PER_IT.png"), punctuation=True, show=args.show)
     _plot_error_rate(PER_PT, save_path=os.path.join(save_folder, "PER_PT.png"), punctuation=True, show=args.show)
+
     _plot_cpu(save_folder=save_folder, show=args.show, dataset=Datasets.TED_LIUM)
 
 
