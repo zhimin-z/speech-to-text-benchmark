@@ -16,7 +16,8 @@ from dataset import (
 )
 from engine import (
     Engine,
-    Engines
+    Engines,
+    StreamingEngines
 )
 from languages import Languages
 from metric import (
@@ -44,8 +45,8 @@ def process(
     indices: Sequence[int],
     metric_names: Sequence[Metrics],
 ) -> Sequence[WorkerResult]:
-    engine = Engine.create(engine_name, language=language, **engine_params)
-    dataset = Dataset.create(
+    engine: Engine = Engine.create(engine_name, language=language, **engine_params)
+    dataset: Dataset = Dataset.create(
         dataset_name,
         folder=dataset_folder,
         language=language,
@@ -102,7 +103,9 @@ def main():
     parser.add_argument("--language", required=True, choices=[x.value for x in Languages])
     parser.add_argument("--punctuation", action="store_true")
     parser.add_argument("--punctuation-set", type=str, default=".?")
+    parser.add_argument("--streaming-chunk-size-ms", type=int, default=32)
     parser.add_argument("--aws-profile")
+    parser.add_argument("--aws-location")
     parser.add_argument("--azure-speech-key")
     parser.add_argument("--azure-speech-location")
     parser.add_argument("--google-application-credentials")
@@ -115,8 +118,8 @@ def main():
     parser.add_argument("--num-workers", type=int, default=os.cpu_count())
     args = parser.parse_args()
 
-    engine = Engines(args.engine)
-    dataset_type = Datasets(args.dataset)
+    engine_name = Engines(args.engine)
+    dataset_name = Datasets(args.dataset)
     language = Languages(args.language)
     punctuation = args.punctuation
     punctuation_set = args.punctuation_set
@@ -125,20 +128,25 @@ def main():
     num_workers = args.num_workers
 
     engine_params = dict()
-    if engine == Engines.AMAZON_TRANSCRIBE:
-        if args.aws_profile is None:
-            raise ValueError("`aws-profile` is required")
+    if engine_name in [Engines.AMAZON_TRANSCRIBE, Engines.AMAZON_TRANSCRIBE_STREAMING]:
+        if args.aws_profile is None or args.aws_location is None:
+            raise ValueError("`aws-profile` and `aws-location` is required")
         os.environ["AWS_PROFILE"] = args.aws_profile
-    elif engine == Engines.AZURE_SPEECH_TO_TEXT:
+    elif engine_name in [Engines.AZURE_SPEECH_TO_TEXT, Engines.AZURE_SPEECH_TO_TEXT_REAL_TIME]:
         if args.azure_speech_key is None or args.azure_speech_location is None:
             raise ValueError("`azure-speech-key` and `azure-speech-location` are required")
         engine_params["azure_speech_key"] = args.azure_speech_key
         engine_params["azure_speech_location"] = args.azure_speech_location
-    elif engine == Engines.GOOGLE_SPEECH_TO_TEXT or engine == Engines.GOOGLE_SPEECH_TO_TEXT_ENHANCED:
+    elif engine_name in [
+        Engines.GOOGLE_SPEECH_TO_TEXT,
+        Engines.GOOGLE_SPEECH_TO_TEXT_ENHANCED,
+        Engines.GOOGLE_SPEECH_TO_TEXT_STREAMING,
+        Engines.GOOGLE_SPEECH_TO_TEXT_ENHANCED_STREAMING,
+    ]:
         if args.google_application_credentials is None:
             raise ValueError("`google-application-credentials` is required")
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = args.google_application_credentials
-    elif engine == Engines.PICOVOICE_CHEETAH:
+    elif engine_name in [Engines.PICOVOICE_CHEETAH, Engines.PICOVOICE_CHEETAH_FAST]:
         if args.picovoice_access_key is None:
             raise ValueError("`picovoice-access-key` is required")
         if args.picovoice_model_path is None and args.language != Languages.EN.value:
@@ -147,7 +155,7 @@ def main():
         engine_params["model_path"] = args.picovoice_model_path
         engine_params["library_path"] = args.picovoice_library_path
         engine_params["punctuation"] = punctuation
-    elif engine == Engines.PICOVOICE_LEOPARD:
+    elif engine_name == Engines.PICOVOICE_LEOPARD:
         if args.picovoice_access_key is None:
             raise ValueError("`picovoice-access-key` is required")
         if args.picovoice_model_path is None and args.language != Languages.EN.value:
@@ -156,18 +164,23 @@ def main():
         engine_params["model_path"] = args.picovoice_model_path
         engine_params["library_path"] = args.picovoice_library_path
         engine_params["punctuation"] = punctuation
-    elif engine == Engines.IBM_WATSON_SPEECH_TO_TEXT:
+    elif engine_name == Engines.IBM_WATSON_SPEECH_TO_TEXT:
         if args.watson_speech_to_text_api_key is None or args.watson_speech_to_text_url is None:
             raise ValueError("`watson-speech-to-text-api-key` and `watson-speech-to-text-url` are required")
         engine_params["watson_speech_to_text_api_key"] = args.watson_speech_to_text_api_key
         engine_params["watson_speech_to_text_url"] = args.watson_speech_to_text_url
+
+    if engine_name in StreamingEngines and engine_name not in [Engines.PICOVOICE_CHEETAH, Engines.PICOVOICE_CHEETAH_FAST]:
+        engine_params["chunk_size_ms"] = args.streaming_chunk_size_ms
+        engine_params["apply_delay"] = False
+        engine_params["ignore_punctuation"] = False
 
     for p in punctuation_set:
         if p not in SUPPORTED_PUNCTUATION_SET:
             raise ValueError(f"`{p}` is not a supported punctuation character")
 
     dataset = Dataset.create(
-        dataset_type,
+        dataset_name,
         folder=dataset_folder,
         language=language,
         punctuation=punctuation,
@@ -188,12 +201,12 @@ def main():
         for i in range(num_workers):
             future = executor.submit(
                 process,
-                engine_name=engine,
+                engine_name=engine_name,
                 engine_params=engine_params,
                 language=language,
                 punctuation=punctuation,
                 punctuation_set=punctuation_set,
-                dataset_name=dataset_type,
+                dataset_name=dataset_name,
                 dataset_folder=dataset_folder,
                 indices=indices[i * chunk : (i + 1) * chunk],
                 metric_names=metrics,
@@ -212,7 +225,7 @@ def main():
 
     rtf = sum(x.process_sec for x in results) / sum(x.audio_sec for x in results)
 
-    results_log_path = os.path.join(RESULTS_FOLDER, language.value, dataset_type.value, f"{str(engine)}.log")
+    results_log_path = os.path.join(RESULTS_FOLDER, language.value, dataset_name.value, f"{str(engine_name)}.log")
     os.makedirs(os.path.dirname(results_log_path), exist_ok=True)
     with open(results_log_path, "w") as f:
         for metric_name, metric_results in metric_results.items():
