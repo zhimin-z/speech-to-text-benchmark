@@ -292,7 +292,7 @@ python3 benchmark_latency.py \
 
 
 
-#### Streaming Punctuation Error Rate
+#### Streaming Engines Punctuation Error Rate
 
 ![](results/plots/PER_ST.png)
 
