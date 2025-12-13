@@ -86,7 +86,7 @@ This document identifies which strategies from the **Unified Evaluation Workflow
 
 **Supported Strategies:**
 
-- ✅ **Strategy 1: Ground Truth Preparation** - The harness pre-loads ground truth reference transcripts from dataset files. For latency benchmarking, it also supports loading word-level timing alignments generated via the Montreal Forced Aligner (script provided in `script/generate_alignments.py`).
+- ✅ **Strategy 1: Ground Truth Preparation** - The harness pre-loads ground truth reference transcripts from dataset files. For latency benchmarking, it also supports loading word-level timing alignments. The repository includes a utility script (`script/generate_alignments.py`) to generate these alignments using the Montreal Forced Aligner (MFA), though MFA itself must be installed separately via conda as documented in `script/README.md`.
 
 **Unsupported Strategies:**
 
